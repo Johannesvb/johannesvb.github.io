@@ -1,8 +1,17 @@
-var dmxlib = require('dmxnet');
-var dmxnet = new dmxlib.dmxnet();
+'use strict'
 
-var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
+const dmxlib = require('dmxnet');
+const dmxnet = new dmxlib.dmxnet();
 
+// var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
+// var websocket = require()
+// const wsc = require('./wsClient').WebsocketClient.getInstance(); // Get the websocket instance.
+// console.log(require('./wsClient').getInstance())
+// require('./wsClient').getInstance()
+// var wsc = require('./nywsclient.js').WebsocketClient.getInstance(); // Get the websocket instance.
+var wsc = require('./nywsclient.js').client // Get the websocket instance.
+// console.log(wsc)
+// console.log(wsc);
 var receiverOptions = {
   subnet: 0, //Destination subnet, default 0
   universe: 1, //Destination universe, default 0
@@ -37,10 +46,8 @@ receiver.on('data', function (data) {
   //   lastData = interestingData;
   // }
 
-  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue){
+  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
     // We only want to do something if we received new data on the channels we are looking at
-    return;
-  } else {
     console.log("CueList: " + data[cueListChannel])
     console.log("Cue: " + data[cueChannel])
     console.log(" ")
@@ -48,5 +55,4 @@ receiver.on('data', function (data) {
     lastList = data[cueListChannel]
 
     //TODO: Send id of cue to play
-  }
 });

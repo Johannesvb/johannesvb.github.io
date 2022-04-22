@@ -1,15 +1,23 @@
-
+'use strict'
 
 // import { w3cwebsocket as W3CWebSocket } from "../node_modules/websocket";
 // import { Message, type } from '../structs/message';
 
 // HACK: URL er ikke dynamic, den er hardcoded til localhost server
-const websocketURL = `${window.location.href
-    .replace("http", "ws")
-    .replace("3000", "3001")}sequence`;
+// const websocketURL = `${window.location.href
+//     .replace("http", "ws")
+//     .replace("3000", "3001")}sequence`;
 
 // TODO: VIL IKKE CONNECTE. MÅSKE W3CWebsocket ER NØDVENDIG?
 // const websocketURL = `wss://tmaps.xyz`;
+
+// import WebSocket from 'ws';
+const ws = require('ws');
+const websocketURL = `wss://tmaps.xyz:3000/sequence`
+
+// const clientws = new ws.WebSocket(websocketURL, {
+//   perMessageDeflate: false
+// });
 
 
 // NOTE: ny implementation herunder, skulle gerne undgå at bruge react only syntax som export og export default
@@ -25,27 +33,36 @@ class _WebsocketClient {
     /**
      * Send message to given websocket
      *
-     * @param {*} ws websocket to send information to
+     * @param {*} wsc websocket to send information to
      * @param {*} message JSON object to encode as CONTENT
      * @memberof _WebsocketClient
      */
-    sendWebsocketMessage(ws = this.websocket, message) {
+    sendWebsocketMessage(wsc = this.websocket, message) {
         let msg = new Message();
         msg.TYPE = type.TEST;
         msg.CONTENT = message || "empty";
 
-        ws.send(JSON.stringify(msg));
+        wsc.send(JSON.stringify(msg));
         console.log("Sent msg");
     }
 
     // Private method
     _websocketConnect(wsURL = websocketURL) {
         console.log(wsURL)
-        var ws = new WebSocket(wsURL);
-        ws.onopen = () => { // new connection logic
+        var wsc;
+        try {
+            wsc = new ws.WebSocket(websocketURL, {
+                perMessageDeflate: false
+            });
+        } catch(error) {
+            console.log(error);
+            return null;
+        }
+        // var ws = new WebSocket(wsURL);
+        wsc.onopen = () => { // new connection logic
             console.log('WebSocket Client Connected to: ' + websocketURL);
         };
-        ws.onclose = (e) => { // closed connection logic
+        wsc.onclose = (e) => { // closed connection logic
             setTimeout(() => {
                 this._websocketConnect(wsURL);
             }, 1000);
@@ -54,7 +71,7 @@ class _WebsocketClient {
 
         // on message logic 
         //TODO: bruge callbacks så alt under the hood stadig fungerer, og developers kan tilføje funktionalitet
-        ws.onmessage = (message) => {
+        wsc.onmessage = (message) => {
             let msg;
             try {
                 msg = JSON.parse(message.data)
@@ -78,8 +95,8 @@ class _WebsocketClient {
 
             this.emit(msg.TYPE, msg);
         };
-        this.websocket = ws; // TEST: behold den her, de andre skulle gerne være ligemeget når det er et object
-        return ws;
+        this.websocket = wsc; // TEST: behold den her, de andre skulle gerne være ligemeget når det er et object
+        return wsc;
     }
 
     send(data) {
@@ -110,6 +127,7 @@ class _WebsocketClient {
 
 // Singleton pattern for enabling multiple files to use the same instance of a websocket client
 var instance;
+
 var WebsocketClient = (function () {
     function createInstance() {
         var ws = new _WebsocketClient(websocketURL);
@@ -125,3 +143,5 @@ var WebsocketClient = (function () {
         }
     };
 })();
+
+module.exports  = WebsocketClient
