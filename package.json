@@ -1,0 +1,19 @@
+{
+  "name": "artnetscanner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dmxN",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dmxnet": "^0.8.0",
+    "ethernet": "^1.0.1",
+    "sacn": "^4.2.0",
+    "stagehack-sacn": "^1.0.7"
+  }
+}
