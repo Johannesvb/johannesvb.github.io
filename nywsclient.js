@@ -6,7 +6,9 @@
 const WebSocketClient = require('websocket').client;
 const wsURL = "wss://tmaps.xyz:3000/sequence";
 
-var client = new WebSocketClient(); // TODO: find ud af hvordan vi i helvede får styr på certificates.
+var client = new WebSocketClient(); 
+// TODO: find ud af hvordan vi i helvede får styr på certificates.
+// TODO: prøv at teste med W3Cwebsockets ligesom i react. Hvis det ikke dur, så fucking hellevede noget lort.
 
 client.on('connectFailed', function(error) {
   console.log('Connect Error: ' + error.toString());

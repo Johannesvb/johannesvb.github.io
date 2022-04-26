@@ -19,6 +19,8 @@ const websocketURL = `wss://tmaps.xyz:3000/sequence`
 //   perMessageDeflate: false
 // });
 
+//DEPRECATED: prøver at lave en anden løsning i den anden fil.
+
 
 // NOTE: ny implementation herunder, skulle gerne undgå at bruge react only syntax som export og export default
 
