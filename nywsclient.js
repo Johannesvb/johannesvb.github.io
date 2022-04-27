@@ -20,7 +20,7 @@ client.on('connectFailed', function(error) {
   console.error(error)
   setTimeout(() => {
     client.connect(wsURL)
-  }, 1000);
+  }, 5000);
 });
 
 client.on('httpResponse',(res, ws) => {
