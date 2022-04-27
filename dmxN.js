@@ -3,6 +3,7 @@
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
 
+const client = require("./nywsclient").client
 // var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
 // var websocket = require()
 // const wsc = require('./wsClient').WebsocketClient.getInstance(); // Get the websocket instance.
@@ -53,6 +54,8 @@ receiver.on('data', function (data) {
     console.log(" ")
     lastCue = data[cueChannel]
     lastList = data[cueListChannel]
+    client.conn?.send(JSON.stringify(`${data}`))
+
 
     //TODO: Send id of cue to play
 });
