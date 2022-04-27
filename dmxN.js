@@ -49,12 +49,17 @@ receiver.on('data', function (data) {
 
   if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
     // We only want to do something if we received new data on the channels we are looking at
-    console.log("CueList: " + data[cueListChannel])
-    console.log("Cue: " + data[cueChannel])
-    console.log(" ")
+    let cuelist = data[0];
+    let cue = data[1];
+    // console.log("CueList: " + data[cueListChannel])
+    // console.log("Cue: " + data[cueChannel])
+    console.log(`CueList: ${cuelist}, cue: ${cue}`)
+    // console.log(" ")
     lastCue = data[cueChannel]
     lastList = data[cueListChannel]
-    client.conn?.send(JSON.stringify(`${data}`))
+    
+    let cuePacket = Array.from([cuelist, cue])
+    client.conn?.send(JSON.stringify(cuePacket))
 
 
     //TODO: Send id of cue to play

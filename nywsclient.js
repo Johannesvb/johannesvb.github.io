@@ -30,13 +30,17 @@ client.on('httpResponse',(res, ws) => {
 
 client.on('connect', (conn) => {
   client.conn = conn;
-  console.log("wawaweewa very nice connection")
-  conn.send(JSON.stringify("test"));
+  console.log("")
+  console.log("Connection established with tmaps.xyz")
   conn.on('close', () => {
     console.log("Closed ws connection");
+    setTimeout(() => {
+      client.connect(wsURL)
+    }, 5000);
   })
   conn.on('error', (error) => {
     console.log(error);
+    
   })
   conn.on('message', (message) => {
     console.log(message);
