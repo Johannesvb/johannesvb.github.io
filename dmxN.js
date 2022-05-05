@@ -48,6 +48,7 @@ receiver.on('data', function (data) {
   // }
 
   if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
+  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
     // We only want to do something if we received new data on the channels we are looking at
     let cuelist = data[0];
     let cue = data[1];
@@ -57,7 +58,6 @@ receiver.on('data', function (data) {
     // console.log(" ")
     lastCue = data[cueChannel]
     lastList = data[cueListChannel]
-    
     let cuePacket = Array.from([cuelist, cue])
     client.conn?.send(JSON.stringify(cuePacket))
 
