@@ -43,6 +43,7 @@ client.on('connect', (conn) => {
     
   })
   conn.on('message', (message) => {
+    console.timeEnd("packet")
     console.log(message);
   })
 })

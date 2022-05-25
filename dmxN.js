@@ -3,6 +3,8 @@
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
 
+const Timer = require('./Timer');
+
 const client = require("./nywsclient").client
 // var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
 // var websocket = require()
@@ -10,7 +12,6 @@ const client = require("./nywsclient").client
 // console.log(require('./wsClient').getInstance())
 // require('./wsClient').getInstance()
 // var wsc = require('./nywsclient.js').WebsocketClient.getInstance(); // Get the websocket instance.
-var wsc = require('./nywsclient.js').client // Get the websocket instance.
 // console.log(wsc)
 // console.log(wsc);
 var receiverOptions = {
@@ -59,6 +60,8 @@ receiver.on('data', function (data) {
     lastList = data[cueListChannel]
     
     let cuePacket = Array.from([cuelist, cue])
+    Timer.timeStart();
+    console.time("packet")
     client.conn?.send(JSON.stringify(cuePacket))
 
 
