@@ -7,6 +7,9 @@
 // const WebSocketClient = require('websocket').client;
 const WebSocketClient = require('websocket').client;
 
+const { Timer } = require('./Timer');
+
+
 
 
 // const wsURL = "wss://tmaps.xyz:3000/dmx";
@@ -43,8 +46,8 @@ client.on('connect', (conn) => {
     
   })
   conn.on('message', (message) => {
-    console.timeEnd("packet")
-    console.log(message);
+    console.log(Timer.timeEnd())
+    //console.log(message);
   })
 })
 

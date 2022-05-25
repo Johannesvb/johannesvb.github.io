@@ -3,7 +3,7 @@
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
 
-const Timer = require('./Timer');
+const { Timer } = require('./Timer');
 
 const client = require("./nywsclient").client
 // var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
@@ -61,9 +61,28 @@ receiver.on('data', function (data) {
     lastList = data[cueListChannel]
     let cuePacket = Array.from([cuelist, cue])
     Timer.timeStart();
-    console.time("packet")
-    client.conn?.send(JSON.stringify(cuePacket))
-
-
-    //TODO: Send id of cue to play
+    sendPacket(cuePacket)
 });
+
+function sendPacket(packet) {
+  Timer.timeStart()
+  client.conn?.send(JSON.stringify(packet))
+}
+
+function sendMockData() {
+  console.log("Starting sending mock data to tmaps.xyz");
+  setInterval(() => {
+    sendPacket(Array.from([1,1]))
+  }, 1000);
+}
+
+const myArgs = process.argv.slice(2);
+switch (myArgs[0]) {
+  case "mock":
+    sendMockData()
+    break;
+
+  default:
+    break;
+}
+
