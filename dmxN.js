@@ -52,8 +52,8 @@ receiver.on('data', function (data) {
   //   lastData = interestingData;
   // }
 
- if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
- if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
+//  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
+//  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
     // We only want to do something if we received new data on the channels we are looking at
     console.clear()
     console.log(data)
@@ -72,7 +72,11 @@ receiver.on('data', function (data) {
     lastList = data[cueListChannel]
     let cuePacket = Array.from([cuelist, cue])
     let cueToPlay = {cuelist, cue}
-    sendPacketToServer(cueToPlay)
+    try {
+      sendPacketToServer(cueToPlay)
+    } catch (error) {
+      console.log(error);
+    }
   //  Timer.timeStart();
  //   sendPacket(cuePacket)
 });
