@@ -2,21 +2,12 @@
 
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
-dmxnet.logger.level = "debug"
+// dmxnet.logger.level = "debug"
 const { Timer } = require('./Timer');
 const { sendPacketToServer } = require('./wsclient.js');
 
-const ws = require("./wsclient.js").ws;
 
-// const client = require("./nywsclient").client
-// var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
-// var websocket = require()
-// const wsc = require('./wsClient').WebsocketClient.getInstance(); // Get the websocket instance.
-// console.log(require('./wsClient').getInstance())
-// require('./wsClient').getInstance()
-// var wsc = require('./nywsclient.js').WebsocketClient.getInstance(); // Get the websocket instance.
-// console.log(wsc)
-// console.log(wsc);
+
 var receiverOptions = {
   subnet: 0, //Destination subnet, default 0
   universe: 0, //Destination universe, default 0
@@ -25,66 +16,43 @@ var receiverOptions = {
 
 var receiver = dmxnet.newReceiver(receiverOptions);
 
-console.log(dmxnet.ip4)
 // What channels to listen to
-var cueListChannel = 4;
+var cuelistChannel = 4;
 var cueChannel = 5;
 var lastCue;
 var lastList;
 
-// var lastData = [];
-// var channels = [0,1]
 var lastMessage = Date.now();
 receiver.on('data', function (data) {
+  let dataIsNotNew = data[cuelistChannel] === lastList && data[cueChannel] === lastCue;
+  if (dataIsNotNew) return;
+  // let dataIsZero = data[cueListChannel] === 0 || data[cueChannel] === 0;
+  // if(dataIsZero) return;
 
-  // var interestingData = []
-  // channels.forEach(channel => {
-  //   interestingData.push(data[channel])
-  // })
+  // Debugging
+  // console.clear()
+  // console.log(data)
 
-  // if (JSON.stringify(lastData) == JSON.stringify(interestingData)) {
-  //   // We only want to do something if we received new data on the channels we are looking at
-  //   return;
-  // }
-  // else {
-  //   console.log(interestingData)
-  //   // console.log("Channel: " + `${i + 1}` + " Value: " + data[i])
-  //   lastData = interestingData;
-  // }
+  // Record time between messages
+  let timeSinceLastMessage = Date.now() - lastMessage;
+  console.log("Time since last message: ", timeSinceLastMessage);
+  lastMessage = Date.now();
 
-//  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
-//  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
-    // We only want to do something if we received new data on the channels we are looking at
-    console.clear()
-    console.log(data)
-    let timeSinceLastMessage = Date.now() - lastMessage;
-    console.log("Time since last message: ", timeSinceLastMessage);
+  let cuelist = data[cuelistChannel];
+  let cue = data[cueChannel];
 
-    lastMessage = Date.now();
-    let cuelist = data[cueListChannel];
-    let cue = data[cueChannel];
+  console.log(`CueList: ${cuelist}, cue: ${cue}`)
 
-    // console.log("CueList: " + data[cueListChannel])
-    // console.log("Cue: " + data[cueChannel])
-    console.log(`CueList: ${cuelist}, cue: ${cue}`)
-    // console.log(" ")
-    lastCue = data[cueChannel]
-    lastList = data[cueListChannel]
-    let cuePacket = Array.from([cuelist, cue])
-    let cueToPlay = {cuelist, cue}
-    try {
-      sendPacketToServer(cueToPlay)
-    } catch (error) {
-      console.log(error);
-    }
-  //  Timer.timeStart();
- //   sendPacket(cuePacket)
+  lastCue = data[cueChannel]
+  lastList = data[cuelistChannel]
+
+  let cueToPlay = {cuelist, cue}
+  try {
+    sendPacketToServer(cueToPlay)
+  } catch (error) {
+    console.log(error);
+  }
 });
-
-// function sendPacket(packet) {
-//   Timer.timeStart()
-//   client.conn?.send(JSON.stringify(packet))
-// }
 
 function sendMockData() {
   console.log("Starting sending mock data to tmaps.xyz");
