@@ -38,15 +38,15 @@ receiver.on('data', function (data) {
   console.log("Time since last message: ", timeSinceLastMessage);
   lastMessage = Date.now();
 
-  let cuelist = data[cuelistChannel];
-  let cue = data[cueChannel];
+  let cuelistID = data[cuelistChannel];
+  let cueID = data[cueChannel];
 
-  console.log(`CueList: ${cuelist}, cue: ${cue}`)
+  console.log(`CueList: ${cuelistID}, cue: ${cueID}`)
 
   lastCue = data[cueChannel]
   lastList = data[cuelistChannel]
 
-  let cueToPlay = {cuelist, cue}
+  let cueToPlay = {cuelistID, cueID}
   try {
     sendPacketToServer(cueToPlay)
   } catch (error) {
