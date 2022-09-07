@@ -2,7 +2,7 @@
 
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
-
+dmxnet.logger.level = "silly"
 const { Timer } = require('./Timer');
 
 const client = require("./nywsclient").client
@@ -16,13 +16,13 @@ const client = require("./nywsclient").client
 // console.log(wsc);
 var receiverOptions = {
   subnet: 0, //Destination subnet, default 0
-  universe: 1, //Destination universe, default 0
+  universe: 0, //Destination universe, default 0
   net: 0, //Destination net, default 0
 }
 
 var receiver = dmxnet.newReceiver(receiverOptions);
 
-
+console.log(dmxnet.ip4)
 // What channels to listen to
 var cueListChannel = 0;
 var cueChannel = 1;
@@ -31,8 +31,9 @@ var lastList;
 
 // var lastData = [];
 // var channels = [0,1]
-
+var lastMessage = Date.now();
 receiver.on('data', function (data) {
+
   // var interestingData = []
   // channels.forEach(channel => {
   //   interestingData.push(data[channel])
@@ -48,11 +49,18 @@ receiver.on('data', function (data) {
   //   lastData = interestingData;
   // }
 
-  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
-  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
+//  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
+//  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
     // We only want to do something if we received new data on the channels we are looking at
+    // console.clear()
+    console.log(data)
+    let timeSinceLastMessage = Date.now() - lastMessage;
+    console.log("Time since last message: ", timeSinceLastMessage);
+
+    lastMessage = Date.now();
     let cuelist = data[0];
     let cue = data[1];
+
     // console.log("CueList: " + data[cueListChannel])
     // console.log("Cue: " + data[cueChannel])
     console.log(`CueList: ${cuelist}, cue: ${cue}`)
@@ -60,8 +68,8 @@ receiver.on('data', function (data) {
     lastCue = data[cueChannel]
     lastList = data[cueListChannel]
     let cuePacket = Array.from([cuelist, cue])
-    Timer.timeStart();
-    sendPacket(cuePacket)
+  //  Timer.timeStart();
+ //   sendPacket(cuePacket)
 });
 
 function sendPacket(packet) {
