@@ -27,5 +27,5 @@ function sendPacketToServer(content) {
 }
 
 module.exports = {
-  ws
+  sendPacketToServer
 }

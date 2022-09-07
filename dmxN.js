@@ -4,6 +4,7 @@ const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
 dmxnet.logger.level = "debug"
 const { Timer } = require('./Timer');
+const { sendPacketToServer } = require('./wsclient.js');
 
 const ws = require("./wsclient.js").ws;
 
@@ -71,7 +72,7 @@ receiver.on('data', function (data) {
     lastList = data[cueListChannel]
     let cuePacket = Array.from([cuelist, cue])
     let cueToPlay = {cuelist, cue}
-    ws.sendPacketToServer(cueToPlay)
+    sendPacketToServer(cueToPlay)
   //  Timer.timeStart();
  //   sendPacket(cuePacket)
 });
