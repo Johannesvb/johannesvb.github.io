@@ -5,6 +5,8 @@ const dmxnet = new dmxlib.dmxnet();
 dmxnet.logger.level = "silly"
 const { Timer } = require('./Timer');
 
+const ws = require("./wsclient.js").WebSocket;
+
 const client = require("./nywsclient").client
 // var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
 // var websocket = require()
@@ -24,8 +26,8 @@ var receiver = dmxnet.newReceiver(receiverOptions);
 
 console.log(dmxnet.ip4)
 // What channels to listen to
-var cueListChannel = 0;
-var cueChannel = 1;
+var cueListChannel = 4;
+var cueChannel = 5;
 var lastCue;
 var lastList;
 
@@ -49,17 +51,17 @@ receiver.on('data', function (data) {
   //   lastData = interestingData;
   // }
 
-//  if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
-//  if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
+ if (data[cueListChannel] === lastList && data[cueChannel] === lastCue) return;
+ if(data[cueListChannel] === 0 || data[cueChannel] === 0) return;
     // We only want to do something if we received new data on the channels we are looking at
-    // console.clear()
+    console.clear()
     console.log(data)
     let timeSinceLastMessage = Date.now() - lastMessage;
     console.log("Time since last message: ", timeSinceLastMessage);
 
     lastMessage = Date.now();
-    let cuelist = data[0];
-    let cue = data[1];
+    let cuelist = data[cueListChannel];
+    let cue = data[cueChannel];
 
     // console.log("CueList: " + data[cueListChannel])
     // console.log("Cue: " + data[cueChannel])
@@ -68,6 +70,8 @@ receiver.on('data', function (data) {
     lastCue = data[cueChannel]
     lastList = data[cueListChannel]
     let cuePacket = Array.from([cuelist, cue])
+    let cueToPlay = {cuelist, cue}
+    ws.sendPacketToServer(cueToPlay)
   //  Timer.timeStart();
  //   sendPacket(cuePacket)
 });
