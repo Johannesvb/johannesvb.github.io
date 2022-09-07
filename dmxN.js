@@ -2,12 +2,12 @@
 
 const dmxlib = require('dmxnet');
 const dmxnet = new dmxlib.dmxnet();
-dmxnet.logger.level = "silly"
+dmxnet.logger.level = "debug"
 const { Timer } = require('./Timer');
 
-const ws = require("./wsclient.js").WebSocket;
+const ws = require("./wsclient.js").ws;
 
-const client = require("./nywsclient").client
+// const client = require("./nywsclient").client
 // var webSocket = new _WebsocketClient(`wss://tmaps.xyz/`)
 // var websocket = require()
 // const wsc = require('./wsClient').WebsocketClient.getInstance(); // Get the websocket instance.
@@ -76,10 +76,10 @@ receiver.on('data', function (data) {
  //   sendPacket(cuePacket)
 });
 
-function sendPacket(packet) {
-  Timer.timeStart()
-  client.conn?.send(JSON.stringify(packet))
-}
+// function sendPacket(packet) {
+//   Timer.timeStart()
+//   client.conn?.send(JSON.stringify(packet))
+// }
 
 function sendMockData() {
   console.log("Starting sending mock data to tmaps.xyz");
