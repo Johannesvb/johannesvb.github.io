@@ -45,16 +45,16 @@ connect();
 
 
   // TODO: see if the connection is established before trying to send packet
-function sendPacketToServer(content) {
+function sendPacketToServer(content, type) {
   if (!openConnection) return;
   let packet = {
     timestamp: Date.now(),
-    type: "dmx",
-    content: content,
+    type,
+    content,
     sender: "dmxpi",
   }
   ws.send(JSON.stringify(packet))
-  console.log("sent DMX");
+  console.log("sent ", type);
 }
 
 module.exports = {
