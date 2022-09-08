@@ -1,8 +1,8 @@
 // import WebSocket from 'ws';
 const WebSocket = require('ws')
 // const url = "wss://192.168.219.161:8000/ws/"
-const url = "wss://localhost:8000/ws/"
-// const url = "wss://lightr.dk/ws/"
+// const url = "wss://localhost:8000/ws/"
+const url = "wss://lightr.dk/ws/"
 
 
 var ws;
