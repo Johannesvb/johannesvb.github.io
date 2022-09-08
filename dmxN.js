@@ -57,7 +57,7 @@ receiver.on('data', function (data) {
       sendCueUpdateToServer(cueID,cuelistID);
       break;
     case intensity != lastIntensity:
-      SendIntensityUpdateToServer(intensity);
+      sendIntensityUpdateToServer(intensity);
       break;
   
     default:
@@ -77,7 +77,7 @@ function sendCueUpdateToServer(cueID, cuelistID) {
     console.log(error);
   }
 }
-function SendIntensityUpdateToServer(intensity) {
+function sendIntensityUpdateToServer(intensity) {
   try {
     sendPacketToServer({intensity}, "intensity_change")
   } catch (error) {

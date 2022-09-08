@@ -1,7 +1,8 @@
 // import WebSocket from 'ws';
 const WebSocket = require('ws')
 // const url = "wss://192.168.219.161:8000/ws/"
-const url = "wss://lightr.dk/ws/"
+const url = "wss://localhost:8000/ws/"
+// const url = "wss://lightr.dk/ws/"
 
 
 var ws;
@@ -18,7 +19,8 @@ function connect() {
   ws.on('open', function open() {
     openConnection = true;
     console.log("Connected established");
-    ws.send('something');
+    sendPacketToServer("", "init_from_pi")
+    // ws.send('something');
   });
 
   ws.on('message', function message(data) {
