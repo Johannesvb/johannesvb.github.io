@@ -23,8 +23,8 @@ sACN.on('packet', (packet) => {
   let timeSinceLastUpdate = currentTime - lastUpdate;
   console.log("Time since last update", timeSinceLastUpdate);
   if(lastUpdate != 0) {
-    if (lastUpdate > latestUpdate) {
-      latestUpdate = lastUpdate
+    if (timeSinceLastUpdate > latestUpdate) {
+      latestUpdate = timeSinceLastUpdate;
     }
   }
   lastUpdate = currentTime;
