@@ -35,8 +35,8 @@ sACN.on('error', (err) => {
 // sACN.removeUniverse(1);
 
 // close all connections; terminate the receiver
-setTimeout(() => {
-  sACN.close();
-}, 60000);
+// setTimeout(() => {
+//   sACN.close();
+// }, 60000);
 
 // sACN.universes; // is a list of the universes being listened to
