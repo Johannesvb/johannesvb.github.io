@@ -6,7 +6,10 @@ const sACN = new Receiver({
   // see table 1 below for all options
 });
 console.log("Listening for sACN");
+
 var lastUpdate = 0;
+var latestUpdate = 0;
+// var latestUpdates = new Array();
 
 sACN.on('packet', (packet) => {
   // console.log('got dmx data:', packet.payload);
@@ -19,9 +22,13 @@ sACN.on('packet', (packet) => {
   var currentTime = Date.now();
   let timeSinceLastUpdate = currentTime - lastUpdate;
   console.log("Time since last update", timeSinceLastUpdate);
+  if(lastUpdate != 0) {
+    if (lastUpdate > latestUpdate) {
+      latestUpdate = lastUpdate
+    }
+  }
   lastUpdate = currentTime;
-
-  console.log(map(packet.payload["479"], 0, 100, 0, 255));
+  console.log("Latest update recorded:", latestUpdate);
   // console.log(packet);
   // see table 2 below for all packet properties
 });
