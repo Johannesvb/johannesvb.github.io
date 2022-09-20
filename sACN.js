@@ -2,12 +2,15 @@ const { Receiver } = require('sacn');
 
 const sACN = new Receiver({
   universes: [1, 2],
+  iface: "eth0"
   // see table 1 below for all options
 });
 console.log("Listening for sACN");
 
 sACN.on('packet', (packet) => {
-  console.log('got dmx data:', packet.payload);
+  // console.log('got dmx data:', packet.payload);
+  console.clear();
+  console.log(packet);
   // see table 2 below for all packet properties
 });
 
