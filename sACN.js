@@ -2,15 +2,27 @@ const { Receiver } = require('sacn');
 
 const sACN = new Receiver({
   universes: [1, 2],
-  iface: "eth0"
+  iface: "169.254.95.10"
   // see table 1 below for all options
 });
 console.log("Listening for sACN");
+var lastUpdate = 0;
 
 sACN.on('packet', (packet) => {
   // console.log('got dmx data:', packet.payload);
   console.clear();
-  console.log(packet);
+  let val = packet.payload["479"]
+  console.log("val", val);
+  let mapval = map(val,0,100,0,255)
+  console.log("map", Math.round(mapval));
+
+  var currentTime = Date.now();
+  let timeSinceLastUpdate = currentTime - lastUpdate;
+  console.log("Time since last update", timeSinceLastUpdate);
+  lastUpdate = currentTime;
+
+  console.log(map(packet.payload["479"], 0, 100, 0, 255));
+  // console.log(packet);
   // see table 2 below for all packet properties
 });
 
@@ -40,3 +52,14 @@ sACN.on('error', (err) => {
 // }, 60000);
 
 // sACN.universes; // is a list of the universes being listened to
+
+
+
+function map(current, in_min, in_max, out_min, out_max) {
+  const mapped = ((current - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
+  return clamp(mapped, out_min, out_max);
+}
+
+function clamp(input, min, max) {
+  return input < min ? min : input > max ? max : input;
+}
