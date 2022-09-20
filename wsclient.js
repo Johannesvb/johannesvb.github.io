@@ -37,7 +37,7 @@ function connect() {
   })
   ws.on('error', function error(code) {
     openConnection = false;
-    console.log("Failed to code ", code);
+    console.log("Failed with code ", code);
     // setTimeout(() => {
     //   connect();
     // }, 5000)
