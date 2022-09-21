@@ -1,9 +1,10 @@
-const { Receiver } = require('sacn');
-const { sendPacketToServer } = require('./wsclient.js');
+import { Receiver } from 'sacn';
+// import { sendPacketToServer } from './wsclient.js';
 
 const sACN = new Receiver({
   universes: [1, 2],
-  iface: "169.254.95.10"
+  iface: "169.254.30.194" // LundBook IP
+  // iface: "169.254.95.10" // Pi IP
   // see table 1 below for all options
 });
 console.log("Listening for sACN");
@@ -15,6 +16,12 @@ var latestUpdate = 0;
 sACN.on('packet', (packet) => {
   // console.log('got dmx data:', packet.payload);
   console.clear();
+  let payloadSlice = packet.payloadAsBuffer?.slice(478, 479);
+  if(!payloadSlice) return;
+  for (const slice of payloadSlice) {
+    console.log(slice.toString(10));
+  }
+  console.log()
   let val = packet.payload["479"]
   console.log("val", val);
   let mapval = map(val,0,100,0,255)
@@ -63,11 +70,12 @@ sACN.on('error', (err) => {
 
 
 
-function map(current, in_min, in_max, out_min, out_max) {
+// Functions for mapping values
+export function map(current: number, in_min: number, in_max: number, out_min: number, out_max: number) {
   const mapped = ((current - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
   return clamp(mapped, out_min, out_max);
 }
 
-function clamp(input, min, max) {
+function clamp(input: number, min: number, max: number) {
   return input < min ? min : input > max ? max : input;
 }
