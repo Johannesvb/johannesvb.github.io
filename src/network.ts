@@ -26,5 +26,5 @@ export const networkIfaces = () => {
 
 
 // TODO: Make it so that when the code is run, these options are listed for the user to choose between
-console.log(networkIfaces());
+// console.log(networkIfaces());
 

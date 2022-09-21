@@ -1,5 +1,4 @@
 'use strict'
-// NOTE: Remember to check if this keeps working as intended, the port is important.
 /**
  * Set the correct URL for the websocket to talk to. If in development, the socket is unsecure
  */
@@ -10,7 +9,7 @@ const WebSocketClient = require('websocket').client;
 const { Timer } = require('./Timer');
 
 
-
+// NOTE: DEPRECATED
 
 // const wsURL = "wss://tmaps.xyz:3000/dmx";
 const wsURL = "ws://tmaps.xyz:3000/dmx"

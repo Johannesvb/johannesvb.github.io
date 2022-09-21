@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dmxN",
-    "dev:sacn": "concurrently \"tsc -w\" \"nodemon build/sACN.js --watch build/ --watch src/ \"",
+    "dev:sacn": "concurrently \"tsc -w\" \"nodemon build/index.js 1 --watch build/ --watch src/ \"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon dmxN.js",
     "lint": "gts lint",

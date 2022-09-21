@@ -3,11 +3,9 @@ import * as dmxlib from 'dmxnet';
 const dmxnet = new dmxlib.dmxnet();
 // dmxnet.logger.level = "debug"
 import { sendPacketToServer } from './wsclient.js';
+const args = process.argv.slice(2); // TEMP:
 
-const args = process.argv.slice(2);
-console.log(args);
-// Abort the process if the argument requirements are not met.
-checkArguments()
+
 
 let selectedChannelStart = parseInt(args[0]) - 1; // Input is 1-indexed, it is converted to 0-indexed
 var cueChannel = selectedChannelStart;
@@ -107,24 +105,4 @@ function sendIntensityUpdateToServer(intensity: number) {
 // }
 
 
-function onlyNumbers(str: string) {
-  return /^[0-9]*$/.test(str);
-}
 
-function checkArguments() {
-  let tooFewArgs = args.length < 1;
-  if(tooFewArgs) {
-    console.error("Not enough arguments, must be 1")
-    process.exit();
-  }
-  let argsOnlyContainNumbers = onlyNumbers(args[0])
-  if(!argsOnlyContainNumbers) {
-    console.error("Arguments must only contain numbers");
-    process.exit();
-  };
-  let argsOutOfBounds = parseInt(args[0]) < 1 || parseInt(args[0]) > 512;
-  if(argsOutOfBounds) {
-    console.error("DMX channel out of bounds, must be between 1-512");
-    process.exit()
-  }
-}

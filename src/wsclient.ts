@@ -58,3 +58,12 @@ export function sendPacketToServer(content: {}, type: string) {
   ws.send(JSON.stringify(packet))
   console.log("sent ", type);
 }
+
+export function sendCueUpdateToServer(cueID: number, cuelistID: number) {
+  let cueToPlay = {cueID, cuelistID}
+  try {
+    sendPacketToServer(cueToPlay, "dmx")
+  } catch (error) {
+    console.log(error);
+  }
+}

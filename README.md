@@ -1,1 +1,1 @@
-# Read incoming dmx values using artNet on rpi, and send message to websocket server
+# Read incoming dmx values using Art-Net / sACN on rpi, and send message to the Lightr server
